@@ -14,6 +14,15 @@ Given a website URL, this skill:
 
 ## Sample Output
 
+See the [examples/](./examples/) folder for real evaluation reports:
+
+| Site | Type | Score | Highlights |
+|------|------|-------|------------|
+| [CoinDive](./examples/coindive-ux-heuristic-evaluation.pdf) | Crypto data platform | 7 Pass, 2 Partial, 1 Fail | Excellent system status, blank 404 page |
+| [Wikipedia](./examples/wikipedia-ux-heuristic-evaluation.pdf) | Encyclopedia portal | 5 Pass, 4 Partial, 0 Fail | Functional minimalism, accessibility gaps |
+| [Notion (Marketing)](./examples/notion-marketing-ux-heuristic-evaluation.pdf) | SaaS homepage | 8 Pass, 2 Partial, 0 Fail | Enterprise-grade UX, 49% images lack alt text |
+| [Notion (App)](./examples/notion-app-ux-heuristic-evaluation.pdf) | Productivity app (logged in) | 9 Pass, 1 Partial, 0 Fail | Near-perfect scores, minor accessibility gaps |
+
 The generated PDF includes:
 
 - **Cover page** with site name, URL, and evaluation date
@@ -85,3 +94,17 @@ ux-heuristic-evaluator/
 | **Major** | Causes significant confusion — high priority |
 | **Minor** | Noticeable friction, users can work around it |
 | **Cosmetic** | Polish issue — low priority |
+
+## Known Limitations
+
+- **No screenshot embedding in PDF (yet):** Browser screenshots are captured during the crawl and serve as visual evidence for the evaluator, but cannot currently be saved to the filesystem for PDF embedding. The `generate_report.py` script already supports image embedding — this will be activated when the platform adds a `save_screenshot_to_disk` capability.
+- **html2canvas compatibility:** Some sites using modern CSS features (e.g., `lab()`, `oklch()` color functions) are incompatible with the html2canvas library used for alternative screenshot capture.
+- **Logged-in evaluations:** The skill can evaluate authenticated app experiences (e.g., Notion, Figma) when the user is already logged in. Navigate to the app in the browser first, then trigger the evaluation.
+
+## Roadmap
+
+- [ ] Screenshot embedding in PDF reports
+- [ ] Mobile viewport evaluation mode
+- [ ] Automated WCAG accessibility checks alongside heuristic evaluation
+- [ ] Comparison mode (evaluate two versions of the same site)
+

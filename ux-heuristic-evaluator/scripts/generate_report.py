@@ -28,7 +28,13 @@ The evaluation_data.json should follow this structure:
           "severity": "Major"
         }
       ],
-      "recommendations": ["Add a success message after form submission", "Add loading states to buttons"]
+      "recommendations": ["Add a success message after form submission", "Add loading states to buttons"],
+      "screenshots": [
+        {
+          "path": "/home/claude/evaluation_screenshots/h1_no_loading.png",
+          "caption": "No loading indicator when applying filters — page appears frozen"
+        }
+      ]
     }
   ],
   "executive_summary": "Overall assessment paragraph...",
@@ -58,7 +64,7 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_JUSTIFY
 from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle,
-    PageBreak, KeepTogether, HRFlowable
+    PageBreak, KeepTogether, HRFlowable, Image
 )
 from reportlab.platypus.flowables import Flowable
 
@@ -177,6 +183,12 @@ def get_styles():
         'TableHeader', parent=styles['Normal'],
         fontSize=9, leading=12, textColor=COLOR_WHITE,
         fontName='Helvetica-Bold'
+    ))
+    styles.add(ParagraphStyle(
+        'CaptionText', parent=styles['Normal'],
+        fontSize=8, leading=11, textColor=COLOR_MUTED,
+        spaceAfter=8, alignment=TA_CENTER,
+        fontName='Helvetica-Oblique'
     ))
 
     return styles
@@ -350,6 +362,34 @@ def build_report(data, output_path):
             styles['HeuristicHeading']
         ))
         section_items.append(Paragraph(summary, styles['Body']))
+
+        # Screenshots
+        screenshots = h.get("screenshots", [])
+        for ss in screenshots:
+            img_path = ss.get("path", "")
+            caption = ss.get("caption", "")
+            if img_path and os.path.exists(img_path):
+                try:
+                    # Calculate image dimensions to fit within page width
+                    max_width = 450
+                    max_height = 250
+                    img = Image(img_path)
+                    iw, ih = img.imageWidth, img.imageHeight
+                    if iw > 0 and ih > 0:
+                        ratio = min(max_width / iw, max_height / ih)
+                        img = Image(img_path, width=iw * ratio, height=ih * ratio)
+                    else:
+                        img = Image(img_path, width=max_width, height=max_height)
+                    section_items.append(Spacer(1, 6))
+                    section_items.append(img)
+                    if caption:
+                        section_items.append(Paragraph(caption, styles['CaptionText']))
+                    section_items.append(Spacer(1, 4))
+                except Exception as e:
+                    section_items.append(Paragraph(
+                        f"<i>[Screenshot: {caption or img_path} — could not embed: {e}]</i>",
+                        styles['CaptionText']
+                    ))
 
         # Positives
         if positives:

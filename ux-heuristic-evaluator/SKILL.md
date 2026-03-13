@@ -98,10 +98,16 @@ If the site is small (fewer than 8 distinct pages), visit all of them.
 ### Step 1.4 — Visit each prioritized page
 
 For each page, collect:
-- **Screenshot** (via `computer` → `screenshot`)
+- **Screenshot** (via `computer` → `screenshot`) — take a screenshot of each page for visual reference during the evaluation. These are visible in the conversation and serve as evidence for your findings.
 - **Page text** (via `get_page_text`)
 - **Interactive elements** (via `read_page` with filter: "interactive")
 - **Full accessibility tree** (via `read_page` with filter: "all", depth: 5)
+
+**About screenshots in the report:**
+
+Screenshots taken with the `computer screenshot` tool are visible to you (the evaluator) during the crawl and serve as the visual evidence base for your findings. However, due to current platform limitations, these screenshots cannot be directly embedded into the generated PDF report. The report relies on detailed textual descriptions of visual findings instead.
+
+If screenshot embedding becomes available in the future (e.g., via a `save_screenshot_to_disk` capability), the `generate_report.py` script already supports embedding images — simply add a `screenshots` array to each heuristic in the evaluation JSON with `path` and `caption` fields.
 
 Store observations mentally as you go — you'll need them in Phase 3. Keep a running list of pages visited with their URLs and what type of page they are.
 
@@ -165,6 +171,21 @@ Read the detailed heuristic definitions from `references/heuristics.md` before s
 4. **Issues found**: Specific problems observed, with the page URL and description
 5. **Severity per issue**: Cosmetic / Minor / Major / Critical
 6. **Recommendations**: Concrete, actionable fixes — not vague advice
+7. **Screenshots**: Select 1-2 key screenshots per heuristic that best illustrate the finding. For each screenshot, provide:
+   - The screenshot ID (from Phase 1)
+   - A brief caption explaining what the screenshot shows and why it's relevant to this heuristic
+
+**Screenshot selection strategy:** Choose screenshots that serve as visual evidence — a blank 404 page for Heuristic #9, a cluttered layout for #8, missing active nav state for #1, etc. Prioritize screenshots that show issues over screenshots that show things working well (unless the heuristic is Pass and you want to highlight good UX). Not every heuristic needs a screenshot — skip it if no visual evidence adds value.
+
+After selecting screenshots, save them to the working directory. Use `upload_image` or copy the screenshot files so they are available at known file paths for the PDF generator:
+
+```
+/home/claude/evaluation_screenshots/
+├── h1_system_status.png
+├── h4_consistency_issue.png
+├── h9_404_page.png
+└── ...
+```
 
 ### Issue Severity Definitions
 
@@ -206,6 +227,7 @@ The PDF should include these sections:
    - Heuristic number, name, and rating badge
    - Definition (one sentence from Nielsen)
    - Summary of findings
+   - **Key screenshot(s)** — 1-2 embedded images with captions illustrating the most important finding for this heuristic
    - Positive observations
    - Issues table: Issue description | Page | Severity
    - Recommendations

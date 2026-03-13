@@ -12,7 +12,7 @@ Skills work best with **Claude in Chrome** (browser automation) and **Computer U
 
 | Skill | Description | Requirements |
 |-------|-------------|-------------|
-| [UX Heuristic Evaluator](./ux-heuristic-evaluator/) | Evaluate any website against Nielsen's 10 Usability Heuristics. Crawls the site, scores each heuristic (Pass/Partial/Fail), and generates a professional PDF audit report. | Claude in Chrome, Python (reportlab) |
+| [UX Heuristic Evaluator](./ux-heuristic-evaluator/) | Evaluate any website against Nielsen's 10 Usability Heuristics. Crawls the site, scores each heuristic (Pass/Partial/Fail), and generates a professional PDF audit report. Includes 4 example reports. | Claude in Chrome, Python (reportlab) |
 
 ## Installation
 
