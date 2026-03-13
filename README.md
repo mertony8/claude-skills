@@ -19,7 +19,7 @@ Skills work best with **Claude in Chrome** (browser automation) and **Computer U
 ### Option 1: Upload the `.skill` file
 
 1. Download the `.skill` file from the skill's directory (or from [Releases](../../releases))
-2. Open **Claude.ai** → **Settings** → **Skills**
+2. Open **Claude.ai** → **Customize** → **Skills**
 3. Click **Add Skill** and upload the file
 
 ### Option 2: Manual installation
