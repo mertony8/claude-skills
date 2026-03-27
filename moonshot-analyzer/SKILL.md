@@ -348,27 +348,87 @@ Update an existing Moonshot Scorecard based on new developments.
 
 ---
 
-## Important Notes
+## Configuration
+
+The framework supports user-level customization. At the start of a conversation, the user may specify preferences that override defaults. If not specified, use the defaults below.
 
 ### Language
-- Default output language is **Turkish** (the framework was originally built for Turkish-speaking users)
-- If the user writes in English, respond in English
-- Match the user's language preference
+
+| Setting | Default | Options |
+|---------|---------|---------|
+| Output language | Match user's language | Turkish, English, or any language the user writes in |
+
+**Rule**: If the user writes in Turkish, respond in Turkish. If in English, respond in English. If the user explicitly requests a language ("Analyze in English"), use that language regardless of conversation language.
+
+### Risk Profile
+
+| Setting | Default | Conservative | Aggressive |
+|---------|---------|-------------|------------|
+| Max per-position | 2% | 0.5% | 3% |
+| Max total moonshot allocation | 10-15% | 5% | 20% |
+| Minimum score for position | 60 | 70 | 50 |
+
+If the user specifies their risk tolerance, adjust position sizing recommendations accordingly. Always state the risk profile being used in the Final Verdict.
+
+### Output Format
+
+| Setting | Default | Options |
+|---------|---------|---------|
+| Report detail level | Full (all sections) | `full` — complete report with all sections |
+| | | `compact` — scorecard + verdict + key catalysts only |
+| | | `scorecard-only` — just the ASCII scorecard box |
+| Spreadsheet export | Included (pipe-delimited row) | Google Sheets row, `.xlsx` dashboard, or skip |
+| Scenario table | Always included | Can be skipped if user says "skip scenarios" |
+
+### Sector Focus
+
+| Setting | Default | Options |
+|---------|---------|---------|
+| Megatrend scope | All 15 categories | User can include/exclude specific megatrends |
+| Market cap range | <$5B | User can adjust (e.g., "<$2B" or "<$10B") |
+| Exchange filter | All US exchanges | Can filter to NASDAQ only, NYSE only, etc. |
+| Exclude list | None | User can exclude specific tickers or sectors |
+
+### Data Sources
+
+| Setting | Default | When unavailable |
+|---------|---------|------------------|
+| Stock price | Live via WebSearch | User provides manually |
+| Financials | Latest 10-Q/10-K via WebSearch | User provides or use last known |
+| Analyst ratings | Live via WebSearch | Skip or user provides |
+| Insider activity | Live via WebSearch | Skip or user provides |
+| News/catalysts | Live via WebSearch | User provides or use last known |
+
+**Critical rule**: Always clearly state the data date in the report header. If any data is stale (>30 days old), flag it with a warning.
+
+### Monitoring Configuration
+
+| Setting | Default | Options |
+|---------|---------|---------|
+| Update trigger | On user request | Can be scheduled (monthly, quarterly) |
+| Alert threshold | Any score change | User can set minimum delta (e.g., ">5 points") |
+| Knockout alert | Always alert | Can be set to alert only on new triggers |
+
+---
+
+## Important Notes
 
 ### Data Freshness
-- Always note the date of analysis prominently
+- Always note the date of analysis prominently in the report header
 - Financial data should be from the most recent available quarter
-- Stock prices should be current (from web search)
-- Flag any data that may be stale
+- Stock prices should be current-day (from web search)
+- If any data point is older than 30 days, flag it: `[DATA: as of YYYY-MM-DD]`
+- If web search is unavailable, clearly state: "Analysis based on user-provided data only"
 
 ### Limitations
 - This is a scoring framework, not investment advice
-- Moonshot stocks are inherently high-risk
+- Moonshot stocks are inherently high-risk — most will fail
 - Past scores do not predict future performance
 - The framework has biases toward technology-heavy sectors
 - Always include the disclaimer in every output
+- Scores are point-in-time snapshots — a company's score can change dramatically with a single event
 
 ### Complementary Frameworks
-- **Warren Buffett Analyst**: For proven profitable companies with established moats
-- **Moonshot Analyzer**: For pre-profit or early-growth companies riding structural megatrends
-- Use both together for a balanced portfolio approach
+- **Warren Buffett Analyst**: For proven profitable companies with established moats — use for the stable core of a portfolio
+- **Moonshot Analyzer**: For pre-profit or early-growth companies riding structural megatrends — use for the high-risk satellite allocation
+- Use both together for a balanced barbell portfolio approach (80-90% value core + 10-15% moonshot satellite)
