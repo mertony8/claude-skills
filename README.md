@@ -13,6 +13,7 @@ Skills work best with **Claude in Chrome** (browser automation) and **Computer U
 | Skill | Description | Requirements |
 |-------|-------------|-------------|
 | [UX Heuristic Evaluator](./ux-heuristic-evaluator/) | Evaluate any website against Nielsen's 10 Usability Heuristics. Crawls the site, scores each heuristic (Pass/Partial/Fail), and generates a professional PDF audit report. Includes 4 example reports. | Claude in Chrome, Python (reportlab) |
+| [Moonshot Analyzer](./moonshot-analyzer/) | 7-dimension scoring framework for evaluating moonshot stocks riding structural megatrends. Includes discovery scan (25 candidates across 15 megatrends), deep dive (100-point scorecard), and monitoring modes. Ships with 4 real analysis examples. | Web Search |
 
 ## Installation
 
